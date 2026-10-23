@@ -49,6 +49,9 @@
   .task.done label{color:var(--muted); text-decoration:line-through}
   .task a{color:var(--accent); text-decoration:none}
   .task a:active{opacity:.6}
+  .task label.link{color:var(--ink)}
+  .task label.link .arrow{color:var(--accent); font-size:13px; margin-left:4px; white-space:nowrap}
+  .task.done label.link{color:var(--muted)}
   .links a{display:flex; justify-content:space-between; align-items:center; padding:13px 14px; background:var(--panel); border:1px solid var(--line); border-radius:12px; margin-bottom:9px; color:var(--ink); text-decoration:none}
   .links small{color:var(--muted); display:block; font-size:12px; margin-top:2px}
   .links .go{color:var(--accent); font-size:20px}
@@ -197,6 +200,30 @@
   try{var raw=localStorage.getItem(KEY); if(raw) store=JSON.parse(raw);}catch(e){}
   function save(){try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){}}
 
+  // Map each task to the page it opens
+  var TASK_URL={
+    "st-bandit1":"https://overthewire.org/wargames/bandit/",
+    "st-bandit2":"https://overthewire.org/wargames/bandit/",
+    "st-thm-pre":"https://tryhackme.com/path/outline/presecurity",
+    "st-thm-intro":"https://tryhackme.com/path/outline/introtocyber",
+    "st-pico":"https://picoctf.org/",
+    "st-messer":"https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/sy0-701-comptia-security-plus-course/",
+    "st-yt":"https://www.youtube.com/@_JohnHammond",
+    "st-meet":"https://defcongroups.org/",
+    "m1-a":"https://overthewire.org/wargames/bandit/",
+    "m1-b":"https://tryhackme.com/path/outline/presecurity",
+    "m2-a":"https://tryhackme.com/path/outline/cybersecurity101",
+    "m2-b":"https://www.professormesser.com/network-plus/n10-009/n10-009-video/n10-009-training-course/",
+    "m3-a":"https://www.professormesser.com/security-plus/sy0-701/sy0-701-video/sy0-701-comptia-security-plus-course/",
+    "m3-b":"https://tryhackme.com/path/outline/cybersecurity101",
+    "m4-a":"https://tryhackme.com/path/outline/jrpenetrationtester",
+    "m4-b":"https://academy.hackthebox.com/",
+    "m4-c":"https://picoctf.org/",
+    "m5-b":"https://krebsonsecurity.com/",
+    "m5-c":"https://www.ic3.gov/",
+    "m6-c":"https://www.aarp.org/money/scams-fraud/"
+  };
+
   // Build task rows
   document.querySelectorAll("[data-task]").forEach(function(div){
     var id=div.getAttribute("data-task");
@@ -204,9 +231,22 @@
     div.textContent="";
     div.className="task";
     var cb=document.createElement("input"); cb.type="checkbox"; cb.id=id;
-    var lb=document.createElement("label"); lb.setAttribute("for",id);
-    // allow simple links written as "text | url"
-    lb.innerHTML=text;
+    var lb;
+    if(TASK_URL[id]){
+      // Label is a link to the resource; checkbox stays separate for marking done
+      lb=document.createElement("a");
+      lb.href=TASK_URL[id]; lb.target="_blank"; lb.rel="noopener";
+      lb.className="link";
+      lb.setAttribute("tabindex","0");
+      lb.innerHTML=text+' <span class="arrow">↗</span>';
+      // make it look/behave like the label block
+      var tag=document.createElement("label"); tag.className="link";
+      tag.appendChild(lb); lb=tag;
+    }else{
+      lb=document.createElement("label");
+      lb.innerHTML=text;
+      lb.addEventListener("click",function(){cb.checked=!cb.checked; cb.dispatchEvent(new Event("change"));});
+    }
     cb.checked=!!store.checks[id];
     if(cb.checked) div.classList.add("done");
     cb.addEventListener("change",function(){
