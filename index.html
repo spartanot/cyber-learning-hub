@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b1020">
+<title>Cyber Learning Hub</title>
+<style>
+  :root{
+    --bg:#0b1020; --panel:#141b33; --panel2:#1b2342; --ink:#e8ecf7;
+    --muted:#95a0c4; --line:#283158; --accent:#5b8cff; --accent2:#36d1a0;
+    --done:#36d1a0; --chip:#222c52;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink);
+    font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased; padding-bottom:40px;
+  }
+  header{
+    position:sticky; top:0; z-index:5;
+    background:linear-gradient(180deg,#0b1020,#0b1020ee);
+    backdrop-filter:blur(8px);
+    padding:16px 16px 10px; border-bottom:1px solid var(--line);
+  }
+  h1{font-size:19px; margin:0 0 2px; letter-spacing:.2px}
+  .sub{color:var(--muted); font-size:12.5px; margin:0}
+  .bar{height:8px; background:var(--panel2); border-radius:99px; margin-top:12px; overflow:hidden}
+  .bar > i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width .4s ease}
+  .barlabel{font-size:12px; color:var(--muted); margin-top:6px}
+  nav{display:flex; gap:8px; padding:12px 16px 0; flex-wrap:wrap}
+  nav button{
+    background:var(--chip); color:var(--ink); border:1px solid var(--line);
+    padding:8px 13px; border-radius:99px; font-size:13px; cursor:pointer;
+  }
+  nav button.active{background:var(--accent); border-color:var(--accent); color:#fff}
+  main{padding:14px 16px 0; max-width:720px; margin:0 auto}
+  .view{display:none} .view.active{display:block}
+  .phase{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px; margin-bottom:14px}
+  .phase h2{font-size:15px; margin:0 0 2px}
+  .phase .goal{color:var(--muted); font-size:13px; margin:0 0 10px}
+  .task{display:flex; gap:11px; align-items:flex-start; padding:9px 0; border-top:1px solid var(--line)}
+  .task:first-of-type{border-top:none}
+  .task input{appearance:none; min-width:22px; height:22px; margin-top:1px; border:2px solid var(--muted); border-radius:6px; background:transparent; cursor:pointer; position:relative}
+  .task input:checked{background:var(--done); border-color:var(--done)}
+  .task input:checked::after{content:"✓"; color:#06281e; font-weight:700; font-size:14px; position:absolute; top:-1px; left:4px}
+  .task label{font-size:14.5px; cursor:pointer; flex:1}
+  .task.done label{color:var(--muted); text-decoration:line-through}
+  .task a{color:var(--accent); text-decoration:none}
+  .task a:active{opacity:.6}
+  .links a{display:flex; justify-content:space-between; align-items:center; padding:13px 14px; background:var(--panel); border:1px solid var(--line); border-radius:12px; margin-bottom:9px; color:var(--ink); text-decoration:none}
+  .links small{color:var(--muted); display:block; font-size:12px; margin-top:2px}
+  .links .go{color:var(--accent); font-size:20px}
+  textarea{width:100%; min-height:220px; background:var(--panel); color:var(--ink); border:1px solid var(--line); border-radius:12px; padding:12px; font:14px/1.5 ui-monospace,Menlo,Consolas,monospace; resize:vertical}
+  .saved{font-size:12px; color:var(--accent2); height:16px; margin-top:6px}
+  .note{background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:11px 13px; font-size:13px; color:var(--muted); margin-bottom:14px}
+  .reset{background:none; border:1px solid var(--line); color:var(--muted); padding:8px 12px; border-radius:8px; font-size:12px; cursor:pointer; margin-top:4px}
+  h3.sec{font-size:13px; color:var(--muted); text-transform:uppercase; letter-spacing:.8px; margin:18px 0 8px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Cyber Learning Hub</h1>
+  <p class="sub">Your white-hat study tracker · works offline · progress saved on this device</p>
+  <div class="bar"><i id="progFill"></i></div>
+  <div class="barlabel" id="progText">0 of 0 done</div>
+</header>
+
+<nav>
+  <button class="active" data-view="starter">Starter</button>
+  <button data-view="path">3–6 Month Path</button>
+  <button data-view="links">Links</button>
+  <button data-view="notes">Notes</button>
+</nav>
+
+<main>
+  <!-- STARTER -->
+  <section class="view active" id="starter">
+    <div class="note">Month 1. A room or level a few nights a week is plenty. The labs want a keyboard — use your phone to track and review, a computer to practice.</div>
+    <div class="phase">
+      <h2>Linux command line</h2>
+      <p class="goal">OverTheWire: Bandit — the foundation everything builds on.</p>
+      <div data-task="st-bandit1">Bandit levels 0–5</div>
+      <div data-task="st-bandit2">Bandit levels 6–10</div>
+    </div>
+    <div class="phase">
+      <h2>Core concepts</h2>
+      <p class="goal">Guided, browser-based, no setup.</p>
+      <div data-task="st-thm-pre">TryHackMe: Pre-Security path</div>
+      <div data-task="st-thm-intro">TryHackMe: Intro to Cyber Security</div>
+      <div data-task="st-pico">picoCTF: 3 beginner "General Skills" challenges</div>
+    </div>
+    <div class="phase">
+      <h2>Watch &amp; absorb</h2>
+      <p class="goal">Background learning on commute or downtime.</p>
+      <div data-task="st-messer">Professor Messer: first Security+ section (free)</div>
+      <div data-task="st-yt">One John Hammond or NetworkChuck beginner video</div>
+    </div>
+    <div class="phase">
+      <h2>Get connected</h2>
+      <p class="goal">The community is half the value.</p>
+      <div data-task="st-meet">Find and note one local meetup (DEF CON group / BSides / OWASP)</div>
+    </div>
+  </section>
+
+  <!-- PATH -->
+  <section class="view" id="path">
+    <div class="note">A steady 5–7 hrs/week gets you through this in about six months. Each month builds on the last — don't skip the fundamentals.</div>
+
+    <div class="phase">
+      <h2>Month 1 · Linux &amp; fundamentals</h2>
+      <p class="goal">Be comfortable in a terminal and know the basic vocabulary.</p>
+      <div data-task="m1-a">Finish Bandit levels 0–15</div>
+      <div data-task="m1-b">Complete TryHackMe Pre-Security path</div>
+      <div data-task="m1-c">Install VirtualBox + a Linux VM on a spare/old computer</div>
+    </div>
+
+    <div class="phase">
+      <h2>Month 2 · Networking</h2>
+      <p class="goal">Understand how data moves — IPs, ports, DNS, HTTP.</p>
+      <div data-task="m2-a">TryHackMe: Cyber Security 101 (networking rooms)</div>
+      <div data-task="m2-b">Professor Messer: Network+ fundamentals sections</div>
+      <div data-task="m2-c">Practice: use Wireshark to inspect your own traffic</div>
+    </div>
+
+    <div class="phase">
+      <h2>Month 3 · Security foundations</h2>
+      <p class="goal">The theory behind defense — start Security+ objectives.</p>
+      <div data-task="m3-a">Professor Messer: full Security+ course (free videos)</div>
+      <div data-task="m3-b">TryHackMe: Cyber Security 101 (remaining rooms)</div>
+      <div data-task="m3-c">Start a running glossary in your Notes tab</div>
+    </div>
+
+    <div class="phase">
+      <h2>Month 4 · Hands-on offensive basics</h2>
+      <p class="goal">Learn how attacks work by doing them in legal labs.</p>
+      <div data-task="m4-a">TryHackMe: Jr Penetration Tester path (first half)</div>
+      <div data-task="m4-b">Hack The Box Academy: 2 starter modules</div>
+      <div data-task="m4-c">Solve 5 more picoCTF challenges</div>
+    </div>
+
+    <div class="phase">
+      <h2>Month 5 · Pick a focus</h2>
+      <p class="goal">Lean toward your goal: fraud &amp; scam prevention.</p>
+      <div data-task="m5-a">Study social engineering (the human side of fraud)</div>
+      <div data-task="m5-b">Read 3 malware/scam write-ups (ESET, Krebs, ANY.RUN reports)</div>
+      <div data-task="m5-c">Review current scams: FTC &amp; FBI IC3 reports</div>
+    </div>
+
+    <div class="phase">
+      <h2>Month 6 · Apply it</h2>
+      <p class="goal">Prove it to yourself and start giving back.</p>
+      <div data-task="m6-a">Enter one online CTF event (beginner-friendly)</div>
+      <div data-task="m6-b">Draft your community tech-safety talk or workshop</div>
+      <div data-task="m6-c">Look into AARP Fraud Watch volunteering</div>
+      <div data-task="m6-d">Decide: sit the Security+ exam? Set a date if yes.</div>
+    </div>
+  </section>
+
+  <!-- LINKS -->
+  <section class="view" id="links">
+    <h3 class="sec">Practice</h3>
+    <div class="links">
+      <a href="https://overthewire.org/wargames/bandit/" target="_blank" rel="noopener">OverTheWire: Bandit<small>Free Linux command-line game</small><span class="go">→</span></a>
+      <a href="https://tryhackme.com" target="_blank" rel="noopener">TryHackMe<small>Guided browser labs · free tier</small><span class="go">→</span></a>
+      <a href="https://picoctf.org" target="_blank" rel="noopener">picoCTF<small>Free beginner hacking puzzles</small><span class="go">→</span></a>
+      <a href="https://academy.hackthebox.com" target="_blank" rel="noopener">Hack The Box Academy<small>Step up once basics are solid</small><span class="go">→</span></a>
+    </div>
+    <h3 class="sec">Learn</h3>
+    <div class="links">
+      <a href="https://www.professormesser.com" target="_blank" rel="noopener">Professor Messer<small>Free Security+ / Network+ courses</small><span class="go">→</span></a>
+      <a href="https://www.youtube.com/@_JohnHammond" target="_blank" rel="noopener">John Hammond (YouTube)<small>Beginner-friendly walkthroughs</small><span class="go">→</span></a>
+      <a href="https://www.coursera.org/professional-certificates/google-cybersecurity" target="_blank" rel="noopener">Google Cybersecurity Cert<small>Audit free on Coursera</small><span class="go">→</span></a>
+    </div>
+    <h3 class="sec">Fraud &amp; scam focus</h3>
+    <div class="links">
+      <a href="https://krebsonsecurity.com" target="_blank" rel="noopener">KrebsOnSecurity<small>Real skimmers &amp; scams, photo-heavy</small><span class="go">→</span></a>
+      <a href="https://www.ic3.gov" target="_blank" rel="noopener">FBI IC3<small>Current scam reports</small><span class="go">→</span></a>
+      <a href="https://www.aarp.org/money/scams-fraud/" target="_blank" rel="noopener">AARP Fraud Watch<small>Volunteer &amp; educate</small><span class="go">→</span></a>
+    </div>
+  </section>
+
+  <!-- NOTES -->
+  <section class="view" id="notes">
+    <div class="note">Commands, concepts, flags you solved, questions to look up. Saved automatically on this device.</div>
+    <textarea id="notes-box" placeholder="e.g. Bandit 3 — hidden files: ls -la, cat ./..."></textarea>
+    <div class="saved" id="savedMsg"></div>
+    <button class="reset" id="resetBtn">Reset all progress</button>
+  </section>
+</main>
+
+<script>
+(function(){
+  var KEY="cyberhub.v1";
+  var store={checks:{},notes:""};
+  try{var raw=localStorage.getItem(KEY); if(raw) store=JSON.parse(raw);}catch(e){}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(store));}catch(e){}}
+
+  // Build task rows
+  document.querySelectorAll("[data-task]").forEach(function(div){
+    var id=div.getAttribute("data-task");
+    var text=div.textContent;
+    div.textContent="";
+    div.className="task";
+    var cb=document.createElement("input"); cb.type="checkbox"; cb.id=id;
+    var lb=document.createElement("label"); lb.setAttribute("for",id);
+    // allow simple links written as "text | url"
+    lb.innerHTML=text;
+    cb.checked=!!store.checks[id];
+    if(cb.checked) div.classList.add("done");
+    cb.addEventListener("change",function(){
+      store.checks[id]=cb.checked;
+      div.classList.toggle("done",cb.checked);
+      save(); updateProgress();
+    });
+    div.appendChild(cb); div.appendChild(lb);
+  });
+
+  function updateProgress(){
+    var all=document.querySelectorAll(".task input");
+    var done=0; all.forEach(function(c){if(c.checked)done++;});
+    var pct=all.length? Math.round(done/all.length*100):0;
+    document.getElementById("progFill").style.width=pct+"%";
+    document.getElementById("progText").textContent=done+" of "+all.length+" done · "+pct+"%";
+  }
+  updateProgress();
+
+  // Tabs
+  document.querySelectorAll("nav button").forEach(function(b){
+    b.addEventListener("click",function(){
+      document.querySelectorAll("nav button").forEach(function(x){x.classList.remove("active")});
+      document.querySelectorAll(".view").forEach(function(x){x.classList.remove("active")});
+      b.classList.add("active");
+      document.getElementById(b.getAttribute("data-view")).classList.add("active");
+      window.scrollTo(0,0);
+    });
+  });
+
+  // Notes
+  var box=document.getElementById("notes-box");
+  var msg=document.getElementById("savedMsg");
+  box.value=store.notes||"";
+  var t;
+  box.addEventListener("input",function(){
+    store.notes=box.value; clearTimeout(t);
+    t=setTimeout(function(){save(); msg.textContent="Saved ✓"; setTimeout(function(){msg.textContent="";},1200);},400);
+  });
+
+  // Reset
+  document.getElementById("resetBtn").addEventListener("click",function(){
+    if(confirm("Clear all checkmarks and notes on this device?")){
+      store={checks:{},notes:""}; save();
+      document.querySelectorAll(".task input").forEach(function(c){c.checked=false; c.closest(".task").classList.remove("done");});
+      box.value=""; updateProgress();
+    }
+  });
+})();
+</script>
+</body>
+</html>
